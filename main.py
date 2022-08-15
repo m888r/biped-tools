@@ -20,6 +20,8 @@ points[5] = [[+cube_size],[-cube_size],[-cube_size]]
 points[6] = [[+cube_size],[+cube_size],[-cube_size]]
 points[7] = [[-cube_size],[+cube_size],[-cube_size]]
 
+anglefile = open("torque.txt", "r")
+
 def draw_line(img, i,j,k,color):
     a,b = k[i],k[j]
     cv2.line(img, (a[0],a[1]),(b[0],b[1]), color, 2)
@@ -34,13 +36,21 @@ delta_radian = 0.0157
 while True:
     img = np.copy(black)
     projected_points = [j for j in range(len(points))]
+    for i in range(1, 10):
+        angles = anglefile.readline()
+    anglesArr = angles.split(' ')
+    x_angle = float(anglesArr[0])
+    y_angle = float(anglesArr[1])
+    z_angle = float(anglesArr[2])
+    # print(anglesArr)
     # x_angle += delta_radian
     # y_angle += delta_radian
     # z_angle += delta_radian
     # angle = int(math.degrees(x_angle))
-    x_angle = 0;
-    y_angle = 0;
-    z_angle = 0;
+
+    # x_angle = 0;
+    # y_angle = 0;
+    # z_angle = 0;
     if x_angle > math.pi*1.99: x_angle = 0
     if y_angle > math.pi*1.99: y_angle = 0
     if z_angle > math.pi*1.99: z_angle = 0
@@ -82,6 +92,7 @@ while True:
         draw_line(img, m, m+4, projected_points, BLUE)
     
     cv2.imshow("", img)
-    time.sleep(1/angle_speed)
+    time.sleep(0.001)
     if cv2.waitKey(1) == ord('q'):
+        anglefile.close()
         break
